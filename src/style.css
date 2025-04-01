@@ -34,3 +34,7 @@ main{
   display: flex;
   z-index: 1;
 }
+
+header{
+  color: aliceblue;
+}
