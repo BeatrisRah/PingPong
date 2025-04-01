@@ -14,6 +14,7 @@ class GameScene extends Phaser.Scene {
         super('scene-game');
         this.leftPlatform;
 		this.rightPlatform;
+		this.ball;
         this.cursor;
 		this.wasd;
         this.platformSpeed = 300; 
@@ -29,10 +30,50 @@ class GameScene extends Phaser.Scene {
 
         this.leftPlatform = this.add.rectangle(0, 0, 20, 80, platformColor);
 		this.rightPlatform = this.add.rectangle(sizes.width - 20, 0, 20, 80,  platformColor).setOrigin(0 , 0)
+		this.ball = this.add.circle(400, 150, 15, 0xffffff)
 
         this.physics.add.existing(this.leftPlatform);
 		this.physics.add.existing(this.rightPlatform)
+        this.physics.add.existing(this.ball);
 
+		
+		this.ball.body.setBounce(1);
+		this.ball.body.setCollideWorldBounds(true);
+		this.ball.body.setVelocity(200, 200);
+		this.ball.body.onWorldBounds = true;
+		this.ball.body.setAllowGravity(false);
+
+		this.physics.add.collider(this.ball, this.leftPlatform, () => {
+			// this.ball.body.setVelocityX(Math.abs(this.ball.body.velocity.x)); 
+			this.ball.body.setVelocityX(this.ball.body.velocity.x * 1.1);
+		});
+		
+		this.physics.add.collider(this.ball, this.rightPlatform, () => {
+			// this.ball.body.setVelocityX(-Math.abs(this.ball.body.velocity.x)); 
+			this.ball.body.setVelocityX(this.ball.body.velocity.x * 1.1); 
+		});
+
+		let speedMultiplier = 1.02; 
+
+		this.physics.world.on('worldbounds', (body, up, down, left, right) => {
+			if (body.gameObject === this.ball) { 
+				if (left) {
+					this.resetBall()
+					console.log("Ball hit the left boundary! Player 2 scores!");
+				} else if (right) {
+					this.resetBall()
+
+					console.log("Ball hit the right boundary! Player 1 scores!");
+				} else {
+					this.ball.body.setVelocity(
+						this.ball.body.velocity.x * speedMultiplier,
+						this.ball.body.velocity.y * speedMultiplier
+					)
+				}
+
+
+			}
+		});
     
         this.leftPlatform.body.setCollideWorldBounds(true); 
         this.leftPlatform.body.setAllowGravity(false);
@@ -45,6 +86,8 @@ class GameScene extends Phaser.Scene {
 
         this.cursor = this.input.keyboard.createCursorKeys();
 		this.wasd = this.input.keyboard.addKeys({up:'W', down:'S'})
+
+		
     }
 
     update() {
@@ -67,6 +110,11 @@ class GameScene extends Phaser.Scene {
         }
 
     }
+
+	resetBall() {
+		this.ball.setPosition(this.sys.game.config.width / 2, this.sys.game.config.height / 2);
+		this.ball.body.setVelocity(200, 200);
+	}
 }
 
 const config = {
