@@ -3,6 +3,7 @@ import Phaser from 'phaser'
 
 const scoreModal = document.querySelector('div.score-modal')
 const pausedMenuModal = document.querySelector('.pause-modal')
+const resumeGameBtn = document.querySelector('.pause-modal button')
 
 const sizes = {
 	width:800,
@@ -32,6 +33,13 @@ class GameScene extends Phaser.Scene {
 
     create() {
 		this.pauseKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+		resumeGameBtn.addEventListener('click', () => {
+			this.isPaused = false;
+			this.physics.world.resume()
+			pausedMenuModal.style.display = 'none'
+
+		})
+
         const platformColor = 0x0f1b24;
         this.add.image(0, 0, 'bg').setOrigin(0, 0);
 
