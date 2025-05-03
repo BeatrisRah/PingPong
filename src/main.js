@@ -4,6 +4,7 @@ import Phaser from 'phaser'
 const scoreModal = document.querySelector('div.score-modal')
 const pausedMenuModal = document.querySelector('.pause-modal')
 const resumeGameBtn = document.querySelector('.pause-modal button')
+const scoreBar = document.getElementById('score')
 
 const sizes = {
 	width:800,
@@ -25,6 +26,10 @@ class GameScene extends Phaser.Scene {
 		this.wasd;
         this.platformSpeed = 300; 
 		this.isPaused = false;
+		this.score = {
+			player1:0,
+			player2:0
+		}
     }
 
     preload() {
@@ -78,19 +83,21 @@ class GameScene extends Phaser.Scene {
 					resetModal()
 					this.resetBall()
 					span.textContent = '2'
-					console.log("Ball hit the left boundary! Player  scores!");
+					this.score.player2++;
 				} else if (right) {
 					scoreModal.style.display = 'block'
 					resetModal()
 					this.resetBall()
 					span.textContent = '1'
-					console.log("Ball hit the right boundary! Player 1 scores!");
+					this.score.player1++;
+
 				} else {
 					this.ball.body.setVelocity(
 						this.ball.body.velocity.x * speedMultiplier,
 						this.ball.body.velocity.y * speedMultiplier
 					)
 				}
+				scoreBar.textContent = `Player 1 - ${this.score.player1} || Player 2 - ${this.score.player2}`
 
 
 			}

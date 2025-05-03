@@ -86,3 +86,11 @@ header{
   color: rgb(216, 224, 231);
   border-radius: 10px;
 }
+
+#score{
+  background-color: rgb(44, 198, 225);
+  position: absolute;
+  right: 45%;
+  bottom: 10%;
+  padding: 20px;
+}
