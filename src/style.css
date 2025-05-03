@@ -38,3 +38,19 @@ main{
 header{
   color: aliceblue;
 }
+
+.score-modal{
+  display: none;
+  width: 25%;
+  height: 20%;
+  background-color: rgb(73, 176, 217);
+  margin-right:auto;
+  margin-left: auto;
+}
+
+.modal-text{
+  color: white;
+  font-size: x-large;
+  text-align: center;
+  padding-top: 10%;
+}

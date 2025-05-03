@@ -1,6 +1,8 @@
 import './style.css'
 import Phaser from 'phaser'
 
+const scoreModal = document.querySelector('div.score-modal')
+
 const sizes = {
 	width:800,
 	height:350,
@@ -8,6 +10,8 @@ const sizes = {
 
 const speedDown = 300;
 const speedX = 200;
+
+const resetModal = () =>  setTimeout(() => scoreModal.style.display = 'none', 600)
 
 class GameScene extends Phaser.Scene {
     constructor() {
@@ -18,6 +22,7 @@ class GameScene extends Phaser.Scene {
         this.cursor;
 		this.wasd;
         this.platformSpeed = 300; 
+		this.isPaused = false;
     }
 
     preload() {
@@ -25,11 +30,12 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
+		this.pauseKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         const platformColor = 0x0f1b24;
         this.add.image(0, 0, 'bg').setOrigin(0, 0);
 
-        this.leftPlatform = this.add.rectangle(0, 0, 20, 80, platformColor);
-		this.rightPlatform = this.add.rectangle(sizes.width - 20, 0, 20, 80,  platformColor).setOrigin(0 , 0)
+        this.leftPlatform = this.add.rectangle(20, 0, 20, 80, platformColor);
+		this.rightPlatform = this.add.rectangle(sizes.width - 40, 0, 20, 80,  platformColor).setOrigin(0 , 0)
 		this.ball = this.add.circle(400, 150, 15, 0xffffff)
 
         this.physics.add.existing(this.leftPlatform);
@@ -56,13 +62,19 @@ class GameScene extends Phaser.Scene {
 		let speedMultiplier = 1.02; 
 
 		this.physics.world.on('worldbounds', (body, up, down, left, right) => {
+			const span = scoreModal.querySelector('span')
 			if (body.gameObject === this.ball) { 
 				if (left) {
+					scoreModal.style.display = 'block'
+					resetModal()
 					this.resetBall()
-					console.log("Ball hit the left boundary! Player 2 scores!");
+					span.textContent = '2'
+					console.log("Ball hit the left boundary! Player  scores!");
 				} else if (right) {
+					scoreModal.style.display = 'block'
+					resetModal()
 					this.resetBall()
-
+					span.textContent = '1'
 					console.log("Ball hit the right boundary! Player 1 scores!");
 				} else {
 					this.ball.body.setVelocity(
@@ -91,6 +103,17 @@ class GameScene extends Phaser.Scene {
     }
 
     update() {
+		if (Phaser.Input.Keyboard.JustDown(this.pauseKey)) {
+			this.isPaused = !this.isPaused;
+		
+			if (this.isPaused) {
+				this.physics.world.pause();
+			} else {
+				this.physics.world.resume();
+			}
+		}
+		
+		if (this.isPaused) return;
         const { up, down } = this.cursor;
 
         if (up.isDown) {
@@ -129,10 +152,12 @@ const config = {
 				x: speedX,
 				y: speedDown
 			},
-			debug: true
+			debug: false
 		}
 	},
 	scene:[GameScene]
 }
+
+
 
 const game = new Phaser.Game(config)
