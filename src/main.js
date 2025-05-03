@@ -2,6 +2,7 @@ import './style.css'
 import Phaser from 'phaser'
 
 const scoreModal = document.querySelector('div.score-modal')
+const pausedMenuModal = document.querySelector('.pause-modal')
 
 const sizes = {
 	width:800,
@@ -107,8 +108,10 @@ class GameScene extends Phaser.Scene {
 			this.isPaused = !this.isPaused;
 		
 			if (this.isPaused) {
+				pausedMenuModal.style.display = 'flex'
 				this.physics.world.pause();
 			} else {
+				pausedMenuModal.style.display = 'none'
 				this.physics.world.resume();
 			}
 		}

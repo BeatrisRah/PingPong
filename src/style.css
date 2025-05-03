@@ -23,6 +23,7 @@ body{
 main{
   flex:1;
   display: flex;
+  position: relative;
 }
 
 #gameCanvas{
@@ -53,4 +54,35 @@ header{
   font-size: x-large;
   text-align: center;
   padding-top: 10%;
+}
+
+.pause-modal{
+  position: absolute;
+  width: 15%;
+  height: 15%;
+  right: 42%;
+  bottom: 43%;
+  z-index: 10;
+  border-radius: 15px;
+  background-color: rgba(35, 66, 92, 0.815);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pause-modal p {
+  color: aliceblue;
+  font-size: larger;
+  font-weight: 500;
+  text-align: center;
+  padding: 20px;
+}
+
+.pause-modal button{
+  padding: 10px;
+  width: 25%;
+  background-color: rgba(21, 21, 26, 0.658);
+  border: none;
+  color: rgb(216, 224, 231);
+  border-radius: 10px;
 }
