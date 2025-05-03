@@ -34,8 +34,8 @@ class GameScene extends Phaser.Scene {
         const platformColor = 0x0f1b24;
         this.add.image(0, 0, 'bg').setOrigin(0, 0);
 
-        this.leftPlatform = this.add.rectangle(20, 0, 20, 80, platformColor);
-		this.rightPlatform = this.add.rectangle(sizes.width - 40, 0, 20, 80,  platformColor).setOrigin(0 , 0)
+        this.leftPlatform = this.add.rectangle(20, sizes.height / 2, 20, 80, platformColor);
+		this.rightPlatform = this.add.rectangle(sizes.width - 20, sizes.height / 2, 20, 80,  platformColor)
 		this.ball = this.add.circle(400, 150, 15, 0xffffff)
 
         this.physics.add.existing(this.leftPlatform);
